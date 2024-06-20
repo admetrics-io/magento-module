@@ -4,7 +4,7 @@
     <route url="/V1/admetrics/config" method="POST">
         <service class="Admetrics\Magento\Api\Config" method="updateConfig"/>
         <resources>
-            <resource ref="Admetrics_Magento::config"/>
+            <resource ref="Admetrics_Magento::admetrics_config_api"/>
         </resources>
     </route>
 </routes>
