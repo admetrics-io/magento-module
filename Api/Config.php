@@ -16,14 +16,14 @@ class Config
     }
 
     /**
-     * @param bool|null $tracking_enabled
+     * @param int|null $tracking_enabled
      * @param string|null $tracking_pixel
      *
      * @return bool
      *
      * @throws NoSuchEntityException
      */
-    public function updateConfig(bool $tracking_enabled = null, string $tracking_pixel = null): bool
+    public function updateConfig(int $tracking_enabled = null, string $tracking_pixel = null): bool
     {
         $shop_id = $this->store_manager->getStore()->getId();
 
