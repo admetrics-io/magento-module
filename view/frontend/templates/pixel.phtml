@@ -1,0 +1,11 @@
+<?php
+/**
+ * @var \Admetrics\Magento\Block\Pixel $block
+ */
+?>
+<?php if ($block->isTrackingEnabled()) { ?>
+    <link rel="preconnect" href="https://shopify.admetrics.events"/>
+    <script type="text/x-magento-init">
+        {"*": {"Admetrics_Magento/js/pixel": <?= $block->getPixelJson(); ?>}}
+    </script>
+<?php } ?>

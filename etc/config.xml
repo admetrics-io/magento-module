@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <admetrics>
+            <tracking>
+                <enabled>0</enabled>
+                <pixel>
+<![CDATA[{
+    "sid": "",
+    "src": "",
+    "endpoint": "",
+    "cn": "",
+    "cv": "",
+    "cv2": "",
+    "pa_vendor": "",
+    "pa_mpid": "",
+    "ss_mpid": "",
+    "ss_tkpid": "",
+    "ss_scpid": ""
+}]]>
+                </pixel>
+            </tracking>
+        </admetrics>
+    </default>
+</config>
