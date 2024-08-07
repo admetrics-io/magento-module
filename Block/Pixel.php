@@ -39,7 +39,7 @@ class Pixel extends Template
 
         $order_block = $this->getLayout()->getBlock('checkout.success');
         if ($order_block) {
-            $order_id = $this->checkout_session->getLastRealOrder()?->getIncrementId() ?? null;
+            $order_id = $this->checkout_session->getLastRealOrder()?->getId() ?? null;
         }
 
         return json_encode([
