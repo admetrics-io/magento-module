@@ -39,7 +39,9 @@ class Pixel extends Template
 
         $order_block = $this->getLayout()->getBlock('checkout.success');
         if ($order_block) {
-            $order_id = $this->checkout_session->getLastRealOrder()?->getId() ?? null;
+            $last_order = $this->checkout_session->getLastRealOrder();
+            $order_id = $last_order?->getEntityId() ?? null;
+            $order_number = $last_order?->getIncrementId() ?? null;
         }
 
         return json_encode([
@@ -49,7 +51,7 @@ class Pixel extends Template
                         "sid" => urlencode($tracking_pixel["sid"] ?? ""),
                         "oid" => urlencode($order_id ?? ""),
                         "cid" => "{CID}",
-                        "on" => "",
+                        "on" => urlencode($order_number ?? ""),
                         "cim" => "",
                         "et" => "magento",
                         "en" => "",
