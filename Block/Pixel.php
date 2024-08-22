@@ -33,11 +33,11 @@ class Pixel extends Template
             true
         );
 
-        $product_block = $this->getLayout()->getBlock('product.info');
+        $product_block = $this->getLayout()?->getBlock('product.info');
         /** @var Product|null $product */
         $product = $product_block ? $product_block->getProduct() : null;
 
-        $order_block = $this->getLayout()->getBlock('checkout.success');
+        $order_block = $this->getLayout()?->getBlock('checkout.success');
         if ($order_block) {
             $last_order = $this->checkout_session->getLastRealOrder();
             $order_id = $last_order?->getEntityId() ?? null;
@@ -56,11 +56,11 @@ class Pixel extends Template
                         "et" => "magento",
                         "en" => "",
                         "spt" => urlencode($product?->getCategory()?->getName() ?? ""),
-                        "sptt" => urlencode($this->getLayout()->getBlock('page.main.title')->getPageTitle() ?? ""),
+                        "sptt" => urlencode($this->getLayout()?->getBlock('page.main.title')?->getPageTitle() ?? ""),
                         "sppt" => urlencode($product?->getName() ?? ""),
                         "spos" => "",
-                        "scr" => urlencode($this->store_manager->getStore()->getCurrentCurrencyCode()),
-                        "scpp" => urlencode($product?->getPriceInfo()->getPrice('final_price')->getValue() ?? ""),
+                        "scr" => urlencode($this->store_manager->getStore()?->getCurrentCurrencyCode() ?? ""),
+                        "scpp" => urlencode($product?->getPriceInfo()?->getPrice('final_price')?->getValue() ?? ""),
                         "sctp" => "{SCTP}",
                         "sss" => "",
                         "spi" => urlencode($product?->getSku() ?? ""),
