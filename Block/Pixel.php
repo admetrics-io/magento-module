@@ -8,12 +8,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Throwable;
 
 class Pixel extends Template
 {
     public function __construct(
         Context $context,
-        protected \Magento\Store\Model\StoreManagerInterface $store_manager,
+        protected StoreManagerInterface $store_manager,
         protected ScopeConfigInterface $scope_config,
         protected Session $checkout_session,
         array $data = []
@@ -28,20 +30,38 @@ class Pixel extends Template
 
     public function getPixelJson(): string
     {
-        $tracking_pixel = json_decode(
-            $this->scope_config->getValue("admetrics/tracking/pixel", ScopeInterface::SCOPE_STORES),
-            true
-        );
+        $tracking_pixel = [];
+        $product = null;
+        $order_id = null;
+        $order_number = null;
+        $page_title = null;
+        $store = null;
+        $product_price = null;
 
-        $product_block = $this->getLayout()?->getBlock('product.info');
-        /** @var Product|null $product */
-        $product = $product_block ? $product_block->getProduct() : null;
+        try {
+            $tracking_pixel = json_decode(
+                $this->scope_config->getValue("admetrics/tracking/pixel", ScopeInterface::SCOPE_STORES),
+                true
+            );
 
-        $order_block = $this->getLayout()?->getBlock('checkout.success');
-        if ($order_block) {
-            $last_order = $this->checkout_session->getLastRealOrder();
-            $order_id = $last_order?->getEntityId() ?? null;
-            $order_number = $last_order?->getIncrementId() ?? null;
+            $product_block = $this->getLayout()->getBlock('product.info');
+            /** @var Product|null $product */
+            $product = $product_block && method_exists($product_block, "getProduct") ? $product_block->getProduct() : null;
+            $product_price = $product?->getPriceInfo()->getPrice('final_price')?->getValue();
+
+            $order_block = $this->getLayout()->getBlock('checkout.success');
+            if ($order_block) {
+                $last_order = $this->checkout_session->getLastRealOrder();
+                $order_id = $last_order?->getEntityId() ?? null;
+                $order_number = $last_order?->getIncrementId() ?? null;
+            }
+
+            $page_title_block = $this->getLayout()->getBlock('page.main.title');
+            $page_title = $page_title_block && method_exists($page_title_block, "getPageTitle") ? $page_title_block->getPageTitle() : null;
+
+            $store = $this->store_manager->getStore();
+        } /** @noinspection PhpUnusedLocalVariableInspection */ catch (Throwable $e) {
+            // do nothing
         }
 
         return json_encode([
@@ -56,11 +76,11 @@ class Pixel extends Template
                         "et" => "magento",
                         "en" => "",
                         "spt" => urlencode($product?->getCategory()?->getName() ?? ""),
-                        "sptt" => urlencode($this->getLayout()?->getBlock('page.main.title')?->getPageTitle() ?? ""),
+                        "sptt" => urlencode($page_title ?? ""),
                         "sppt" => urlencode($product?->getName() ?? ""),
                         "spos" => "",
-                        "scr" => urlencode($this->store_manager->getStore()?->getCurrentCurrencyCode() ?? ""),
-                        "scpp" => urlencode($product?->getPriceInfo()?->getPrice('final_price')?->getValue() ?? ""),
+                        "scr" => urlencode($store?->getCurrentCurrencyCode() ?? ""),
+                        "scpp" => urlencode($product_price ?? ""),
                         "sctp" => "{SCTP}",
                         "sss" => "",
                         "spi" => urlencode($product?->getSku() ?? ""),
