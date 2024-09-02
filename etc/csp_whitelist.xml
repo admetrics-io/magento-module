@@ -4,6 +4,13 @@
         <policy id="script-src">
             <values>
                 <value id="admetrics" type="host">https://shopify.admetrics.events</value>
+                <value id="admetrics.v6" type="host">https://v6.shopify.admetrics.events</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="admetrics" type="host">https://shopify.admetrics.events</value>
+                <value id="admetrics.v6" type="host">https://v6.shopify.admetrics.events</value>
             </values>
         </policy>
     </policies>
