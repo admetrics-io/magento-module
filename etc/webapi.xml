@@ -7,4 +7,24 @@
             <resource ref="Admetrics_Magento::admetrics_config_api"/>
         </resources>
     </route>
+    <route url="/V1/admetrics/customerOrderCount" method="POST">
+        <service class="Admetrics\Magento\Api\CustomerOrderCountRepositoryInterface" method="getList" />
+        <resources>
+            <resource ref="Magento_Customer::read" />
+            <resource ref="Magento_Sales::read" />
+        </resources>
+    </route>
+    <route url="/V1/admetrics/customerOrderIndex" method="POST">
+        <service class="Admetrics\Magento\Api\CustomerOrderIndexRepositoryInterface" method="getList" />
+        <resources>
+            <resource ref="Magento_Customer::read" />
+            <resource ref="Magento_Sales::read" />
+        </resources>
+    </route>
+    <route url="/V1/admetrics/meta" method="GET">
+        <service class="Admetrics\Magento\Api\MetaRepositoryInterface" method="getMeta" />
+        <resources>
+            <resource ref="Admetrics_Magento::admetrics_config_api"/>
+        </resources>
+    </route>
 </routes>

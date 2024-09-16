@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Admetrics\Magento\Api\Data\CustomerOrderCountInterface" type="Admetrics\Magento\Model\Data\CustomerOrderCount" />
+    <preference for="Admetrics\Magento\Api\Data\CustomerOrderIndexInterface" type="Admetrics\Magento\Model\Data\CustomerOrderIndex" />
+    <preference for="Admetrics\Magento\Api\Data\MetaInterface" type="Admetrics\Magento\Model\Data\Meta" />
+    <preference for="Admetrics\Magento\Api\Data\MetaModuleInterface" type="Admetrics\Magento\Model\Data\MetaModule" />
+    <preference for="Admetrics\Magento\Api\CustomerOrderCountRepositoryInterface" type="Admetrics\Magento\Model\CustomerOrderCountRepository" />
+    <preference for="Admetrics\Magento\Api\CustomerOrderIndexRepositoryInterface" type="Admetrics\Magento\Model\CustomerOrderIndexRepository" />
+    <preference for="Admetrics\Magento\Api\MetaRepositoryInterface" type="Admetrics\Magento\Model\MetaRepository" />
+</config>
