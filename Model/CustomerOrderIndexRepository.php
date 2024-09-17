@@ -27,9 +27,11 @@ class CustomerOrderIndexRepository implements CustomerOrderIndexRepositoryInterf
         $connection = $this->resourceConnection->getConnection();
         $sql = "
         SELECT entity_id AS order_id, order_index FROM (
-            SELECT entity_id, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at, entity_id) AS order_index FROM (
-                SELECT entity_id, customer_id, created_at FROM sales_order WHERE entity_id IN ($comma_separated_ids)
-            ) AS p1
+            SELECT entity_id, ROW_NUMBER() 
+            OVER (PARTITION BY customer_id ORDER BY created_at, entity_id) AS order_index 
+            FROM sales_order WHERE customer_id IN (
+                SELECT DISTINCT customer_id FROM sales_order WHERE entity_id IN ($comma_separated_ids)
+            )
         ) AS p2 WHERE entity_id IN ($comma_separated_ids);
         ";
         $items = $connection->fetchAll($sql);
