@@ -25,7 +25,8 @@ class CustomerOrderCountRepository implements CustomerOrderCountRepositoryInterf
         $comma_separated_ids = implode(",", $customer_ids);
 
         $connection = $this->resourceConnection->getConnection();
-        $sql = "SELECT customer_id, COUNT(*) AS order_count FROM sales_order WHERE customer_id IN ($comma_separated_ids) GROUP BY customer_id";
+        $sales_order_table = $this->resourceConnection->getTableName('sales_order');
+        $sql = "SELECT customer_id, COUNT(*) AS order_count FROM $sales_order_table WHERE customer_id IN ($comma_separated_ids) GROUP BY customer_id";
         $items = $connection->fetchAll($sql);
 
         return array_map(function ($item) {

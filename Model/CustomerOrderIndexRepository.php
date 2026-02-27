@@ -25,12 +25,13 @@ class CustomerOrderIndexRepository implements CustomerOrderIndexRepositoryInterf
         $comma_separated_ids = implode(",", $order_ids);
 
         $connection = $this->resourceConnection->getConnection();
+        $sales_order_table = $this->resourceConnection->getTableName('sales_order');
         $sql = "
         SELECT entity_id AS order_id, order_index FROM (
             SELECT entity_id, ROW_NUMBER() 
             OVER (PARTITION BY customer_id ORDER BY created_at, entity_id) AS order_index 
             FROM sales_order WHERE customer_id IN (
-                SELECT DISTINCT customer_id FROM sales_order WHERE entity_id IN ($comma_separated_ids)
+                SELECT DISTINCT customer_id FROM $sales_order_table WHERE entity_id IN ($comma_separated_ids)
             )
         ) AS p2 WHERE entity_id IN ($comma_separated_ids);
         ";
