@@ -7,6 +7,8 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Throwable;
@@ -18,6 +20,7 @@ class Pixel extends Template
         protected StoreManagerInterface $store_manager,
         protected ScopeConfigInterface $scope_config,
         protected Session $checkout_session,
+        protected OrderRepositoryInterface $order_repository,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -49,12 +52,9 @@ class Pixel extends Template
             $product = $product_block && method_exists($product_block, "getProduct") ? $product_block->getProduct() : null;
             $product_price = $product?->getPriceInfo()->getPrice('final_price')?->getValue();
 
-            $order_block = $this->getLayout()->getBlock('checkout.success');
-            if ($order_block) {
-                $last_order = $this->checkout_session->getLastRealOrder();
-                $order_id = $last_order?->getEntityId() ?? null;
-                $order_number = $last_order?->getIncrementId() ?? null;
-            }
+            $order = $this->getSuccessOrder();
+            $order_id = $order?->getEntityId();
+            $order_number = $order?->getIncrementId();
 
             $page_title_block = $this->getLayout()->getBlock('page.main.title');
             $page_title = $page_title_block && method_exists($page_title_block, "getPageTitle") ? $page_title_block->getPageTitle() : null;
@@ -112,5 +112,31 @@ class Pixel extends Template
                 ]
             ],
         ]);
+    }
+
+    private function getSuccessOrder(): ?OrderInterface
+    {
+        $is_success_page = $this->getLayout()->getBlock('checkout.success')
+            || $this->getRequest()->getFullActionName() === 'checkout_onepage_success';
+
+        if (!$is_success_page) {
+            return null;
+        }
+
+        try {
+            $last_order = $this->checkout_session->getLastRealOrder();
+            if ($last_order->getEntityId()) {
+                return $last_order;
+            }
+
+            $last_order_id = $this->checkout_session->getLastOrderId();
+            if ($last_order_id) {
+                return $this->order_repository->get((int)$last_order_id);
+            }
+        } catch (Throwable) {
+            return null;
+        }
+
+        return null;
     }
 }
