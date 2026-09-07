@@ -16,7 +16,9 @@
     "pa_mpid": "",
     "ss_mpid": "",
     "ss_tkpid": "",
-    "ss_scpid": ""
+    "ss_scpid": "",
+    "ss_ob": "",
+    "ss_ga": ""
 }]]>
                 </pixel>
             </tracking>
