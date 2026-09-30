@@ -9,6 +9,10 @@ All notable changes to this project are documented in this file.
 - Add checkout success order fallback for shops where the default `checkout.success` block is replaced but the request is still `checkout_onepage_success`.
 - Add Outbrain and Google Ads server-side tracking settings (`ss_ob`, `ss_ga`).
 
+### Changed
+
+- Remove Snapchat server-side tracking config and frontend output.
+
 ### Fixed
 
 - Fix PHP 8.4 nullable parameter deprecation in the config API.

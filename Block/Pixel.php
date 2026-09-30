@@ -107,7 +107,6 @@ class Pixel extends Template
                         "data-pa-mpid" => $tracking_pixel["pa_mpid"] ?? "-",
                         "data-ss-mpid" => $tracking_pixel["ss_mpid"] ?? "-",
                         "data-ss-tkpid" => $tracking_pixel["ss_tkpid"] ?? "-",
-                        "data-ss-scpid" => $tracking_pixel["ss_scpid"] ?? "-",
                         "data-ss-ob" => $tracking_pixel["ss_ob"] ?? "-",
                         "data-ss-ga" => $tracking_pixel["ss_ga"] ?? "-",
                     ],
